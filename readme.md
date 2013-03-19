@@ -1,6 +1,10 @@
 chrt.js
 =======
-chrt.js is a fork of Chart.js, available under the [MIT license](http://opensource.org/licenses/MIT).
+*Simple HTML5 Charts using the canvas element* [chartjs.org](http://www.chartjs.org)
+
+You can find documentation at [chartjs.org/docs](http://www.chartjs.org/docs).
+
+Chrt.js is available under the [MIT license] (http://opensource.org/licenses/MIT).
 
 ## Getting started
 

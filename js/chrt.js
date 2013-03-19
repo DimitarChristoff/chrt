@@ -1487,7 +1487,7 @@
 			}
 
 			function setFont(style, size, family){
-				return [style, size + px, family].join('');
+				return [style, size + px, family].join(' ');
 			}
 		};
 

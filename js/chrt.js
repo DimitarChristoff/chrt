@@ -9,6 +9,13 @@
 
 			var chart = this;
 
+			// common strings
+			var center = 'center',
+				right = 'right',
+				left = 'left',
+				middle = 'middle',
+				px = 'px';
+
 			//Easing functions adapted from Robert Penner's easing equations
 			//http://www.robertpenner.com/easing/
 
@@ -164,9 +171,10 @@
 				}
 			};
 
+			//todo: add resize events that gather and rescale, move to event methods
 			//Variables global to the chart
-			var width = context.canvas.width;
-			var height = context.canvas.height;
+			var width = context.canvas.width,
+				height = context.canvas.height;
 
 
 			//High pixel density displays - multiply the size of the canvas height/width by the device pixel ratio, then scale.
@@ -261,6 +269,7 @@
 			};
 
 			this.Pie = function(data, options){
+
 				chart.Pie.defaults = {
 					segmentShowStroke: true,
 					segmentStrokeColor: "#fff",
@@ -299,7 +308,7 @@
 			};
 
 			this.Line = function(data, options){
-
+				//todo: decouple defaults so it's extendible on protos for instances
 				chart.Line.defaults = {
 					scaleOverlay: false,
 					scaleOverride: false,
@@ -329,12 +338,14 @@
 					animationEasing: "easeOutQuart",
 					onAnimationComplete: null
 				};
+
 				var config = (options) ? mergeChartConfig(chart.Line.defaults, options) : chart.Line.defaults;
 
 				return new Line(data, config, context);
 			};
 
 			this.Bar = function(data, options){
+
 				chart.Bar.defaults = {
 					scaleOverlay: false,
 					scaleOverride: false,
@@ -361,6 +372,7 @@
 					animationEasing: "easeOutQuart",
 					onAnimationComplete: null
 				};
+
 				var config = (options) ? mergeChartConfig(chart.Bar.defaults, options) : chart.Bar.defaults;
 
 				return new Bar(data, config, context);
@@ -371,8 +383,19 @@
 			};
 
 			var PolarArea = function(data, config, ctx){
-				var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString;
 
+				var maxSize,
+					scaleHop,
+					calculatedScale,
+					labelHeight,
+					scaleHeight,
+					valueBounds,
+					labelTemplateString,
+					i = 0,
+					steps;
+
+				//todo: what is maxSize, seems undefined.
+				//todo: what is scaleHeight, undefined.
 
 				calculateDrawingSizes();
 
@@ -382,7 +405,6 @@
 
 				//Check and set the scale
 				if (!config.scaleOverride){
-
 					calculatedScale = calculateScale(scaleHeight, valueBounds.maxSteps, valueBounds.minSteps, valueBounds.maxValue, valueBounds.minValue, labelTemplateString);
 				}
 				else {
@@ -391,14 +413,18 @@
 						stepValue: config.scaleStepWidth,
 						graphMin: config.scaleStartValue,
 						labels: []
-					}
-					for (var i = 0; i < calculatedScale.steps; i++){
-						if (labelTemplateString){
-							calculatedScale.labels.push(_.template(labelTemplateString, {value: (config.scaleStartValue + (config.scaleStepWidth * i)).toFixed(getDecimalPlaces(config.scaleStepWidth))}));
+					};
+
+					if (labelTemplateString){
+						for (steps = calculatedScale.steps; i < steps; i++){
+							calculatedScale.labels.push(_.template(labelTemplateString, {
+								value: (config.scaleStartValue + (config.scaleStepWidth * i)).toFixed(getDecimalPlaces(config.scaleStepWidth))
+							}));
 						}
 					}
 				}
 
+				//todo: unexpected...
 				scaleHop = maxSize / (calculatedScale.steps);
 
 				//Wrap in an animation loop wrapper
@@ -423,7 +449,11 @@
 				}
 
 				function drawScale(){
-					for (var i = 0; i < calculatedScale.steps; i++){
+					var i = 0,
+						label,
+						textWidth;
+
+					for (; i < calculatedScale.steps; i++){
 						//If the line object is there
 						if (config.scaleShowLine){
 							ctx.beginPath();
@@ -436,10 +466,10 @@
 						if (config.scaleShowLabels){
 							ctx.textAlign = "center";
 							ctx.font = config.scaleFontStyle + " " + config.scaleFontSize + "px " + config.scaleFontFamily;
-							var label = calculatedScale.labels[i];
+							label = calculatedScale.labels[i];
 							//If the backdrop object is within the font object
 							if (config.scaleShowLabelBackdrop){
-								var textWidth = ctx.measureText(label).width;
+								textWidth = ctx.measureText(label).width;
 								ctx.fillStyle = config.scaleBackdropColor;
 								ctx.beginPath();
 								ctx.rect(
@@ -461,7 +491,9 @@
 					var startAngle = -Math.PI / 2,
 						angleStep = (Math.PI * 2) / data.length,
 						scaleAnimation = 1,
-						rotateAnimation = 1;
+						rotateAnimation = 1,
+						i = 0;
+
 					if (config.animation){
 						if (config.animateScale){
 							scaleAnimation = animationDecimal;
@@ -471,7 +503,7 @@
 						}
 					}
 
-					for (var i = 0; i < data.length; i++){
+					for (; i < data.length; i++){
 
 						ctx.beginPath();
 						ctx.arc(width / 2, height / 2, scaleAnimation * calculateOffset(data[i].value, calculatedScale, scaleHop), startAngle, startAngle + rotateAnimation * angleStep, false);
@@ -514,20 +546,28 @@
 			};
 
 			var Radar = function(data, config, ctx){
-				var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString;
+
+				var maxSize,
+					scaleHop,
+					calculatedScale,
+					labelHeight,
+					scaleHeight,
+					valueBounds,
+					labelTemplateString,
+					i = 0,
+					steps;
 
 				//If no labels are defined set to an empty array, so referencing length for looping doesn't blow up.
 				if (!data.labels) data.labels = [];
 
 				calculateDrawingSizes();
 
-				var valueBounds = getValueBounds();
+				valueBounds = getValueBounds();
 
 				labelTemplateString = (config.scaleShowLabels) ? config.scaleLabel : null;
 
 				//Check and set the scale
 				if (!config.scaleOverride){
-
 					calculatedScale = calculateScale(scaleHeight, valueBounds.maxSteps, valueBounds.minSteps, valueBounds.maxValue, valueBounds.minValue, labelTemplateString);
 				}
 				else {
@@ -536,38 +576,47 @@
 						stepValue: config.scaleStepWidth,
 						graphMin: config.scaleStartValue,
 						labels: []
-					}
-					for (var i = 0; i < calculatedScale.steps; i++){
-						if (labelTemplateString){
-							calculatedScale.labels.push(_.template(labelTemplateString, {value: (config.scaleStartValue + (config.scaleStepWidth * i)).toFixed(getDecimalPlaces(config.scaleStepWidth))}));
+					};
+
+					if (labelTemplateString){
+						for (steps = calculatedScale.steps; i < steps; i++){
+							calculatedScale.labels.push(_.template(labelTemplateString, {
+								value: (config.scaleStartValue + (config.scaleStepWidth * i)).toFixed(getDecimalPlaces(config.scaleStepWidth))
+							}));
 						}
 					}
 				}
 
+				//todo: confusing, maxSize gets assigned as byproduct of calculateDrawingSizes()
 				scaleHop = maxSize / (calculatedScale.steps);
 
 				animationLoop(config, drawScale, drawAllDataPoints, ctx);
 
 				//Radar specific functions.
 				function drawAllDataPoints(animationDecimal){
-					var rotationDegree = (2 * Math.PI) / data.datasets[0].data.length;
+					var rotationDegree = (2 * Math.PI) / data.datasets[0].data.length,
+						i = 0,
+						len = data.datasets.length,
+						len2,
+						j,
+						k = 0;
 
 					ctx.save();
 					//translate to the centre of the canvas.
 					ctx.translate(width / 2, height / 2);
 					ctx.rotate(rotationDegree);
+
 					//We accept multiple data sets for radar charts, so show loop through each set
-					for (var i = 0; i < data.datasets.length; i++){
+					for (; i < len; i++){
 						ctx.beginPath();
 
 						ctx.moveTo(0, animationDecimal * (-1 * calculateOffset(data.datasets[i].data[0], calculatedScale, scaleHop)));
-						for (var j = 1; j < data.datasets[i].data.length; j++){
+						for (j = 1, len2 = data.datasets[i].data.length; j < len2; j++){
 							ctx.rotate(rotationDegree);
 							ctx.lineTo(0, animationDecimal * (-1 * calculateOffset(data.datasets[i].data[j], calculatedScale, scaleHop)));
-
 						}
-						ctx.closePath();
 
+						ctx.closePath();
 
 						ctx.fillStyle = data.datasets[i].fillColor;
 						ctx.strokeStyle = data.datasets[i].strokeColor;
@@ -575,35 +624,42 @@
 						ctx.fill();
 						ctx.stroke();
 
-
 						if (config.pointDot){
 							ctx.fillStyle = data.datasets[i].pointColor;
 							ctx.strokeStyle = data.datasets[i].pointStrokeColor;
 							ctx.lineWidth = config.pointDotStrokeWidth;
-							for (var k = 0; k < data.datasets[i].data.length; k++){
+							for (; k < len2; k++){
 								ctx.rotate(rotationDegree);
 								ctx.beginPath();
 								ctx.arc(0, animationDecimal * (-1 * calculateOffset(data.datasets[i].data[k], calculatedScale, scaleHop)), config.pointDotRadius, 2 * Math.PI, false);
 								ctx.fill();
 								ctx.stroke();
 							}
-
 						}
-
 					}
+
 					ctx.restore();
 				}
 
 				function drawScale(){
-					var rotationDegree = (2 * Math.PI) / data.datasets[0].data.length;
+					var rotationDegree = (2 * Math.PI) / data.datasets[0].data.length,
+						i = 0,
+						h = 0,
+						j,
+						len,
+						len2,
+						textWidth,
+						opposite,
+						adjacent;
+
 					ctx.save();
 					ctx.translate(width / 2, height / 2);
 
 					if (config.angleShowLineOut){
 						ctx.strokeStyle = config.angleLineColor;
 						ctx.lineWidth = config.angleLineWidth;
-						for (var h = 0; h < data.datasets[0].data.length; h++){
 
+						for (len = data.datasets[0].data.length; h < len; h++){
 							ctx.rotate(rotationDegree);
 							ctx.beginPath();
 							ctx.moveTo(0, 0);
@@ -612,29 +668,30 @@
 						}
 					}
 
-					for (var i = 0; i < calculatedScale.steps; i++){
+					for (len = calculatedScale.steps; i < len; i++){
 						ctx.beginPath();
 
 						if (config.scaleShowLine){
 							ctx.strokeStyle = config.scaleLineColor;
 							ctx.lineWidth = config.scaleLineWidth;
 							ctx.moveTo(0, -scaleHop * (i + 1));
-							for (var j = 0; j < data.datasets[0].data.length; j++){
+
+							for (j = 0, len2 = data.datasets[0].data.length; j < len2; j++){
 								ctx.rotate(rotationDegree);
 								ctx.lineTo(0, -scaleHop * (i + 1));
 							}
+
 							ctx.closePath();
 							ctx.stroke();
-
 						}
 
 						if (config.scaleShowLabels){
-							ctx.textAlign = 'center';
-							ctx.font = config.scaleFontStyle + " " + config.scaleFontSize + "px " + config.scaleFontFamily;
-							ctx.textBaseline = "middle";
+							ctx.textAlign = center;
+							ctx.font = setFont(config.scaleFontStyle, config.scaleFontSize, config.scaleFontFamily);
+							ctx.textBaseline = middle;
 
 							if (config.scaleShowLabelBackdrop){
-								var textWidth = ctx.measureText(calculatedScale.labels[i]).width;
+								textWidth = ctx.measureText(calculatedScale.labels[i]).width;
 								ctx.fillStyle = config.scaleBackdropColor;
 								ctx.beginPath();
 								ctx.rect(
@@ -643,46 +700,50 @@
 									Math.round(textWidth + (config.scaleBackdropPaddingX * 2)), //Width
 									Math.round(config.scaleFontSize + (config.scaleBackdropPaddingY * 2)) //Height
 								);
+
 								ctx.fill();
 							}
+
 							ctx.fillStyle = config.scaleFontColor;
 							ctx.fillText(calculatedScale.labels[i], 0, -scaleHop * (i + 1));
 						}
 					}
 
-					for (var k = 0; k < data.labels.length; k++){
-						ctx.font = config.pointLabelFontStyle + " " + config.pointLabelFontSize + "px " + config.pointLabelFontFamily;
+					for (i = 0, len = data.labels.length; i < len; i++){
+
+						ctx.font = setFont(config.pointLabelFontStyle, config.pointLabelFontSize, config.pointLabelFontFamily);
 						ctx.fillStyle = config.pointLabelFontColor;
-						var opposite = Math.sin(rotationDegree * k) * (maxSize + config.pointLabelFontSize);
-						var adjacent = Math.cos(rotationDegree * k) * (maxSize + config.pointLabelFontSize);
 
-						if (rotationDegree * k == Math.PI || rotationDegree * k == 0){
-							ctx.textAlign = "center";
-						}
-						else if (rotationDegree * k > Math.PI){
-							ctx.textAlign = "right";
-						}
-						else {
-							ctx.textAlign = "left";
-						}
+						opposite = Math.sin(rotationDegree * i) * (maxSize + config.pointLabelFontSize);
+						adjacent = Math.cos(rotationDegree * i) * (maxSize + config.pointLabelFontSize);
 
-						ctx.textBaseline = "middle";
+						ctx.textAlign = (rotationDegree * i == Math.PI || rotationDegree * i == 0)
+							? center
+							: (rotationDegree * i > Math.PI)
+							? right
+							: left;
 
-						ctx.fillText(data.labels[k], opposite, -adjacent);
+						ctx.textBaseline = middle;
 
+						ctx.fillText(data.labels[i], opposite, -adjacent);
 					}
+
 					ctx.restore();
 				}
 
 				function calculateDrawingSizes(){
+					var labelLength = 0,
+						textMeasurement,
+						i = 0,
+						len = data.labels.length;
+
 					maxSize = (Min([width, height]) / 2);
 
 					labelHeight = config.scaleFontSize * 2;
 
-					var labelLength = 0;
-					for (var i = 0; i < data.labels.length; i++){
-						ctx.font = config.pointLabelFontStyle + " " + config.pointLabelFontSize + "px " + config.pointLabelFontFamily;
-						var textMeasurement = ctx.measureText(data.labels[i]).width;
+					for (; i < len; i++){
+						ctx.font = setFont(config.pointLabelFontStyle, config.pointLabelFontSize, config.pointLabelFontFamily);
+						textMeasurement = ctx.measureText(data.labels[i]).width;
 						if (textMeasurement > labelLength) labelLength = textMeasurement;
 					}
 
@@ -970,12 +1031,16 @@
 				}
 
 				function calculateXAxisSize(){
-					var longestText = 1;
+					var longestText = 1,
+						i = 0,
+						len,
+						measuredText;
+
 					//if we are showing the labels
 					if (config.scaleShowLabels){
-						ctx.font = config.scaleFontStyle + " " + config.scaleFontSize + "px " + config.scaleFontFamily;
-						for (var i = 0; i < calculatedScale.labels.length; i++){
-							var measuredText = ctx.measureText(calculatedScale.labels[i]).width;
+						ctx.font = setFont(config.scaleFontStyle, config.scaleFontSize, config.scaleFontFamily);
+						for (len = calculatedScale.labels.length; i < len; i++){
+							measuredText = ctx.measureText(calculatedScale.labels[i]).width;
 							longestText = (measuredText > longestText) ? measuredText : longestText;
 						}
 						//Add a little extra padding from the y axis
@@ -989,16 +1054,23 @@
 				}
 
 				function calculateDrawingSizes(){
+					var i = 0,
+						len = data.labels.length,
+						textLength;
+
 					maxSize = height;
 
 					//Need to check the X axis first - measure the length of each text metric, and figure out if we need to rotate by 45 degrees.
-					ctx.font = config.scaleFontStyle + " " + config.scaleFontSize + "px " + config.scaleFontFamily;
+					ctx.font = setFont(config.scaleFontStyle, config.scaleFontSize, config.scaleFontFamily);
+
+					//todo: sigh, confusing.
 					widestXLabel = 1;
-					for (var i = 0; i < data.labels.length; i++){
-						var textLength = ctx.measureText(data.labels[i]).width;
+					for (; i < len; i++){
+						textLength = ctx.measureText(data.labels[i]).width;
 						//If the text length is longer - make that equal to longest text!
 						widestXLabel = (textLength > widestXLabel) ? textLength : widestXLabel;
 					}
+
 					if (width / data.labels.length < widestXLabel){
 						rotateLabels = 45;
 						if (width / data.labels.length < Math.cos(rotateLabels) * widestXLabel){
@@ -1199,16 +1271,22 @@
 				}
 
 				function calculateDrawingSizes(){
+					var i = 0,
+						len = data.labels.length,
+						textLength;
+
 					maxSize = height;
 
 					//Need to check the X axis first - measure the length of each text metric, and figure out if we need to rotate by 45 degrees.
-					ctx.font = config.scaleFontStyle + " " + config.scaleFontSize + "px " + config.scaleFontFamily;
+					ctx.font = setFont(config.scaleFontStyle, config.scaleFontSize, config.scaleFontFamily);
+
 					widestXLabel = 1;
-					for (var i = 0; i < data.labels.length; i++){
-						var textLength = ctx.measureText(data.labels[i]).width;
+					for (; i < len; i++){
+						textLength = ctx.measureText(data.labels[i]).width;
 						//If the text length is longer - make that equal to longest text!
 						widestXLabel = (textLength > widestXLabel) ? textLength : widestXLabel;
 					}
+
 					if (width / data.labels.length < widestXLabel){
 						rotateLabels = 45;
 						if (width / data.labels.length < Math.cos(rotateLabels) * widestXLabel){
@@ -1225,7 +1303,6 @@
 
 					//Add a little padding between the x line and the text
 					maxSize -= 5;
-
 
 					labelHeight = config.scaleFontSize;
 
@@ -1277,9 +1354,8 @@
 					easingFunction = animationOptions[config.animationEasing],
 					percentAnimComplete = (config.animation) ? 0 : 1;
 
-
-				if (typeof drawScale !== "function") drawScale = function(){
-				};
+				if (typeof drawScale !== "function")
+					drawScale = function(){};
 
 				requestAnimFrame(animLoop);
 
@@ -1308,7 +1384,6 @@
 					}
 
 				}
-
 			}
 
 			//Declare global functions to be called within this namespace here.
@@ -1390,48 +1465,29 @@
 
 			//Default if undefined
 			function Default(userDeclared, valueIfFalse){
-				if (!userDeclared){
-					return valueIfFalse;
-				} else {
-					return userDeclared;
-				}
+				return typeof userDeclared === 'undefined' ? valueIfFalse : userDeclared;
 			}
 
 			//Apply cap a value at a high or low number
 			function CapValue(valueToCap, maxValue, minValue){
-				if (_.isNumber(maxValue)){
-					if (valueToCap > maxValue){
-						return maxValue;
-					}
-				}
-				if (_.isNumber(minValue)){
-					if (valueToCap < minValue){
-						return minValue;
-					}
-				}
-				return valueToCap;
+				return (_.isNumber(maxValue) && valueToCap > maxValue)
+					? maxValue
+					: (_.isNumber(minValue) && valueToCap < minValue)
+					? minValue
+					:  valueToCap;
 			}
 
 			function getDecimalPlaces(num){
-				var numberOfDecimalPlaces;
-				if (num % 1 != 0){
-					return num.toString().split(".")[1].length
-				}
-				else {
-					return 0;
-				}
-
+				Number(num) !== num && (num = Number(num))
+				return (!isNaN(num) && num % 1 !== 0) ? (Number.prototype.toString.call(num)).split('.')[1].length : 0;
 			}
 
 			function mergeChartConfig(defaults, userDefined){
-				var returnObj = {};
-				for (var attrname in defaults){
-					returnObj[attrname] = defaults[attrname];
-				}
-				for (var attrname in userDefined){
-					returnObj[attrname] = userDefined[attrname];
-				}
-				return returnObj;
+				return _.merge(defaults, userDefined);
+			}
+
+			function setFont(style, size, family){
+				return [style, size + px, family].join('');
 			}
 		};
 

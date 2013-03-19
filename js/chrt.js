@@ -910,15 +910,19 @@
 					var i = 0,
 						len = data.datasets.length,
 						len2,
-						j;
+						j,
+						dataSet,
+						dataSetD;
 
 					for (; i < len; i++){
-						ctx.strokeStyle = data.datasets[i].strokeColor;
+						dataSet = data.datasets[i];
+						dataSetD = dataSet.data;
+						ctx.strokeStyle = dataSet.strokeColor;
 						ctx.lineWidth = config.datasetStrokeWidth;
 						ctx.beginPath();
-						ctx.moveTo(yAxisPosX, xAxisPosY - animPc * (calculateOffset(data.datasets[i].data[0], calculatedScale, scaleHop)))
+						ctx.moveTo(yAxisPosX, xAxisPosY - animPc * (calculateOffset(dataSetD[0], calculatedScale, scaleHop)))
 
-						for (j = 1, len2 = data.datasets[i].data.length; j < len2; j++){
+						for (j = 1, len2 = dataSetD.length; j < len2; j++){
 							if (config.bezierCurve){
 								ctx.bezierCurveTo(xPos(j - 0.5), yPos(i, j - 1), xPos(j - 0.5), yPos(i, j), xPos(j), yPos(i, j));
 							}
@@ -929,10 +933,10 @@
 
 						ctx.stroke();
 						if (config.datasetFill){
-							ctx.lineTo(yAxisPosX + (valueHop * (data.datasets[i].data.length - 1)), xAxisPosY);
+							ctx.lineTo(yAxisPosX + (valueHop * (dataSetD.length - 1)), xAxisPosY);
 							ctx.lineTo(yAxisPosX, xAxisPosY);
 							ctx.closePath();
-							ctx.fillStyle = data.datasets[i].fillColor;
+							ctx.fillStyle = dataSet.fillColor;
 							ctx.fill();
 						}
 						else {
@@ -940,12 +944,13 @@
 						}
 
 						if (config.pointDot){
-							ctx.fillStyle = data.datasets[i].pointColor;
-							ctx.strokeStyle = data.datasets[i].pointStrokeColor;
+							ctx.fillStyle = dataSet.pointColor;
+							ctx.strokeStyle = dataSet.pointStrokeColor;
 							ctx.lineWidth = config.pointDotStrokeWidth;
+
 							for (j = 0; j < len2; j++){
 								ctx.beginPath();
-								ctx.arc(yAxisPosX + (valueHop * j), xAxisPosY - animPc * (calculateOffset(data.datasets[i].data[j], calculatedScale, scaleHop)), config.pointDotRadius, 0, Math.PI * 2, true);
+								ctx.arc(yAxisPosX + (valueHop * j), xAxisPosY - animPc * (calculateOffset(dataSetD[j], calculatedScale, scaleHop)), config.pointDotRadius, 0, Math.PI * 2, true);
 								ctx.fill();
 								ctx.stroke();
 							}

@@ -26,7 +26,7 @@
 
     </div>
     
-    <ul id="sections"><li class="l2"><a href="#getting-started">Getting started</a><ul><li class="l3"><a href="#including-chrtjs">Including chrt.js</a></li></ul></li><li class="l2"><a href="#creating-a-chart">Creating a chart</a></li></ul>
+    <ul id="sections"><li class="l2"><a href="#getting-started">Getting started</a><ul><li class="l3"><a href="#including-chrtjs">Including chrt.js</a></li></ul></li><li class="l2"><a href="#creating-a-chart">Creating a chart</a></li><li class="l2"><a href="#chart-types">Chart types</a><ul><li class="l3"><a href="#line-chart">Line chart</a></li></ul></li></ul>
     
     <div class="extra" id="github">
         <a href="https://github.com/DimitarChristoff/chrt">Source on Github</a>
@@ -57,6 +57,119 @@ find <code>lodash</code> or <code>underscore.js</code> first (so <code>window._<
 <pre class="prettyprint linenums"><code class="lang-javascript">// Get the context of the canvas element we want to select
 var ctx = document.getElementbyId(&quot;myChart&quot;).getContext(&quot;2d&quot;);
 var myNewChart = new Chart(ctx).PolarArea(data);</code></pre>
+<p>After we&#39;ve instantiated the Chart class on the canvas we want to draw on, Chart.js will handle the scaling for retina displays.</p>
+<p>With the Chart class set up, we can go on to create one of the charts Chart.js has available. In the example below, we would be drawing a Polar area chart.</p>
+<pre class="prettyprint linenums"><code class="lang-javascript">new Chart(ctx).PolarArea(data,options);</code></pre>
+<p>We call a method of the name of the chart we want to create. We pass in the data for that chart type, and the options for that chart as parameters. Chart.js will merge the options you pass in with the default options for that chart type.</p>
+<h2 id="chart-types">Chart types</h2>
+<h3 id="line-chart">Line chart</h3>
+<h4>Introduction</h4>
+<p>A line chart is a way of plotting data points on a line.</p>
+<p>Often, it is used to show trend data, and the comparison of different data sets.</p>
+<h4>Example usage</h4>
+<pre class="prettyprint linenums"><code class="lang-javascript">new Chart(ctx).PolarArea(data,options);</code></pre>
+<h4>Data structure</h4>
+<pre class="prettyprint linenums"><code class="lang-javascript">var data = {
+    labels: [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;],
+    datasets: [{
+        fillColor: &quot;rgba(220,220,220,0.5)&quot;,
+        strokeColor: &quot;rgba(220,220,220,1)&quot;,
+        pointColor: &quot;rgba(220,220,220,1)&quot;,
+        pointStrokeColor: &quot;#fff&quot;,
+        data: [65, 59, 90, 81, 56, 55, 40]
+    }, {
+        fillColor: &quot;rgba(151,187,205,0.5)&quot;,
+        strokeColor: &quot;rgba(151,187,205,1)&quot;,
+        pointColor: &quot;rgba(151,187,205,1)&quot;,
+        pointStrokeColor: &quot;#fff&quot;,
+        data: [28, 48, 40, 19, 96, 27, 100]
+    }]
+};</code></pre>
+<p>The line chart requires an array of labels for each of the data points. This is show on the X axis.</p>
+<p>The data for line charts is broken up into an array of datasets. Each dataset has a colour for the fill, a colour for the line and colours for the points and strokes of the points. These colours are strings just like CSS. You can use RGBA, RGB, HEX or HSL notation.</p>
+<h4>Chart options</h4>
+<pre class="prettyprint linenums"><code class="lang-javascript">Line.defaults = {
+
+    //Boolean - If we show the scale above the chart data
+    scaleOverlay: false,
+
+    //Boolean - If we want to override with a hard coded scale
+    scaleOverride: false,
+
+    //** Required if scaleOverride is true **
+    //Number - The number of steps in a hard coded scale
+    scaleSteps: null,
+    //Number - The value jump in the hard coded scale
+    scaleStepWidth: null,
+    //Number - The scale starting value
+    scaleStartValue: null,
+
+    //String - Colour of the scale line
+    scaleLineColor: &quot;rgba(0,0,0,.1)&quot;,
+
+    //Number - Pixel width of the scale line
+    scaleLineWidth: 1,
+
+    //Boolean - Whether to show labels on the scale
+    scaleShowLabels: false,
+
+    //Interpolated JS string - can access value
+    scaleLabel: &quot;&lt;%=value%&gt;&quot;,
+
+    //String - Scale label font declaration for the scale label
+    scaleFontFamily: &quot;&#39;Arial&#39;&quot;,
+
+    //Number - Scale label font size in pixels
+    scaleFontSize: 12,
+
+    //String - Scale label font weight style
+    scaleFontStyle: &quot;normal&quot;,
+
+    //String - Scale label font colour
+    scaleFontColor: &quot;#666&quot;,
+
+    ///Boolean - Whether grid lines are shown across the chart
+    scaleShowGridLines: true,
+
+    //String - Colour of the grid lines
+    scaleGridLineColor: &quot;rgba(0,0,0,.05)&quot;,
+
+    //Number - Width of the grid lines
+    scaleGridLineWidth: 1,
+
+    //Boolean - Whether the line is curved between points
+    bezierCurve: true,
+
+    //Boolean - Whether to show a dot for each point
+    pointDot: true,
+
+    //Number - Radius of each point dot in pixels
+    pointDotRadius: 3,
+
+    //Number - Pixel width of point dot stroke
+    pointDotStrokeWidth: 1,
+
+    //Boolean - Whether to show a stroke for datasets
+    datasetStroke: true,
+
+    //Number - Pixel width of dataset stroke
+    datasetStrokeWidth: 2,
+
+    //Boolean - Whether to fill the dataset with a colour
+    datasetFill: true,
+
+    //Boolean - Whether to animate the chart
+    animation: true,
+
+    //Number - Number of animation steps
+    animationSteps: 60,
+
+    //String - Animation easing effect
+    animationEasing: &quot;easeOutQuart&quot;,
+
+    //Function - Fires when the animation is complete
+    onAnimationComplete: null
+};</code></pre>
 
     
 </div>

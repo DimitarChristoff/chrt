@@ -179,8 +179,8 @@
 
 			//High pixel density displays - multiply the size of the canvas height/width by the device pixel ratio, then scale.
 			if (window.devicePixelRatio){
-				context.canvas.style.width = width + "px";
-				context.canvas.style.height = height + "px";
+				context.canvas.style.width = width + px;
+				context.canvas.style.height = height + px;
 				context.canvas.height = height * window.devicePixelRatio;
 				context.canvas.width = width * window.devicePixelRatio;
 				context.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -195,24 +195,24 @@
 					scaleStepWidth: null,
 					scaleStartValue: null,
 					scaleShowLine: true,
-					scaleLineColor: "rgba(0,0,0,.1)",
+					scaleLineColor: 'rgba(0,0,0,.1)',
 					scaleLineWidth: 1,
 					scaleShowLabels: true,
-					scaleLabel: "<%=value%>",
-					scaleFontFamily: "'Arial'",
+					scaleLabel: '<%=value%>',
+					scaleFontFamily: '\'Arial\'',
 					scaleFontSize: 12,
-					scaleFontStyle: "normal",
-					scaleFontColor: "#666",
+					scaleFontStyle: 'normal',
+					scaleFontColor: '#666',
 					scaleShowLabelBackdrop: true,
-					scaleBackdropColor: "rgba(255,255,255,0.75)",
+					scaleBackdropColor: 'rgba(255,255,255,0.75)',
 					scaleBackdropPaddingY: 2,
 					scaleBackdropPaddingX: 2,
 					segmentShowStroke: true,
-					segmentStrokeColor: "#fff",
+					segmentStrokeColor: '#fff',
 					segmentStrokeWidth: 2,
 					animation: true,
 					animationSteps: 100,
-					animationEasing: "easeOutBounce",
+					animationEasing: 'easeOutBounce',
 					animateRotate: true,
 					animateScale: false,
 					onAnimationComplete: null
@@ -232,25 +232,25 @@
 					scaleStepWidth: null,
 					scaleStartValue: null,
 					scaleShowLine: true,
-					scaleLineColor: "rgba(0,0,0,.1)",
+					scaleLineColor: 'rgba(0,0,0,.1)',
 					scaleLineWidth: 1,
 					scaleShowLabels: false,
-					scaleLabel: "<%=value%>",
-					scaleFontFamily: "'Arial'",
+					scaleLabel: '<%=value%>',
+					scaleFontFamily: '\'Arial\'',
 					scaleFontSize: 12,
-					scaleFontStyle: "normal",
-					scaleFontColor: "#666",
+					scaleFontStyle: 'normal',
+					scaleFontColor: '#666',
 					scaleShowLabelBackdrop: true,
-					scaleBackdropColor: "rgba(255,255,255,0.75)",
+					scaleBackdropColor: 'rgba(255,255,255,0.75)',
 					scaleBackdropPaddingY: 2,
 					scaleBackdropPaddingX: 2,
 					angleShowLineOut: true,
-					angleLineColor: "rgba(0,0,0,.1)",
+					angleLineColor: 'rgba(0,0,0,.1)',
 					angleLineWidth: 1,
-					pointLabelFontFamily: "'Arial'",
-					pointLabelFontStyle: "normal",
+					pointLabelFontFamily: '\'Arial\'',
+					pointLabelFontStyle: 'normal',
 					pointLabelFontSize: 12,
-					pointLabelFontColor: "#666",
+					pointLabelFontColor: '#666',
 					pointDot: true,
 					pointDotRadius: 3,
 					pointDotStrokeWidth: 1,
@@ -259,7 +259,7 @@
 					datasetFill: true,
 					animation: true,
 					animationSteps: 60,
-					animationEasing: "easeOutQuart",
+					animationEasing: 'easeOutQuart',
 					onAnimationComplete: null
 				};
 
@@ -272,11 +272,11 @@
 
 				chart.Pie.defaults = {
 					segmentShowStroke: true,
-					segmentStrokeColor: "#fff",
+					segmentStrokeColor: '#fff',
 					segmentStrokeWidth: 2,
 					animation: true,
 					animationSteps: 100,
-					animationEasing: "easeOutBounce",
+					animationEasing: 'easeOutBounce',
 					animateRotate: true,
 					animateScale: false,
 					onAnimationComplete: null
@@ -291,12 +291,12 @@
 
 				chart.Doughnut.defaults = {
 					segmentShowStroke: true,
-					segmentStrokeColor: "#fff",
+					segmentStrokeColor: '#fff',
 					segmentStrokeWidth: 2,
 					percentageInnerCutout: 50,
 					animation: true,
 					animationSteps: 100,
-					animationEasing: "easeOutBounce",
+					animationEasing: 'easeOutBounce',
 					animateRotate: true,
 					animateScale: false,
 					onAnimationComplete: null
@@ -315,16 +315,16 @@
 					scaleSteps: null,
 					scaleStepWidth: null,
 					scaleStartValue: null,
-					scaleLineColor: "rgba(0,0,0,.1)",
+					scaleLineColor: 'rgba(0,0,0,.1)',
 					scaleLineWidth: 1,
 					scaleShowLabels: true,
-					scaleLabel: "<%=value%>",
-					scaleFontFamily: "'Arial'",
+					scaleLabel: '<%=value%>',
+					scaleFontFamily: '\'Arial\'',
 					scaleFontSize: 12,
-					scaleFontStyle: "normal",
-					scaleFontColor: "#666",
+					scaleFontStyle: 'normal',
+					scaleFontColor: '#666',
 					scaleShowGridLines: true,
-					scaleGridLineColor: "rgba(0,0,0,.05)",
+					scaleGridLineColor: 'rgba(0,0,0,.05)',
 					scaleGridLineWidth: 1,
 					bezierCurve: true,
 					pointDot: true,
@@ -335,7 +335,7 @@
 					datasetFill: true,
 					animation: true,
 					animationSteps: 60,
-					animationEasing: "easeOutQuart",
+					animationEasing: 'easeOutQuart',
 					onAnimationComplete: null
 				};
 
@@ -352,16 +352,16 @@
 					scaleSteps: null,
 					scaleStepWidth: null,
 					scaleStartValue: null,
-					scaleLineColor: "rgba(0,0,0,.1)",
+					scaleLineColor: 'rgba(0,0,0,.1)',
 					scaleLineWidth: 1,
 					scaleShowLabels: true,
-					scaleLabel: "<%=value%>",
-					scaleFontFamily: "'Arial'",
+					scaleLabel: '<%=value%>',
+					scaleFontFamily: '\'Arial\'',
 					scaleFontSize: 12,
-					scaleFontStyle: "normal",
-					scaleFontColor: "#666",
+					scaleFontStyle: 'normal',
+					scaleFontColor: '#666',
 					scaleShowGridLines: true,
-					scaleGridLineColor: "rgba(0,0,0,.05)",
+					scaleGridLineColor: 'rgba(0,0,0,.05)',
 					scaleGridLineWidth: 1,
 					barShowStroke: true,
 					barStrokeWidth: 2,
@@ -369,7 +369,7 @@
 					barDatasetSpacing: 1,
 					animation: true,
 					animationSteps: 60,
-					animationEasing: "easeOutQuart",
+					animationEasing: 'easeOutQuart',
 					onAnimationComplete: null
 				};
 
@@ -464,8 +464,8 @@
 						}
 
 						if (config.scaleShowLabels){
-							ctx.textAlign = "center";
-							ctx.font = config.scaleFontStyle + " " + config.scaleFontSize + "px " + config.scaleFontFamily;
+							ctx.textAlign = 'center';
+							ctx.font = config.scaleFontStyle + ' ' + config.scaleFontSize + 'px ' + config.scaleFontFamily;
 							label = calculatedScale.labels[i];
 							//If the backdrop object is within the font object
 							if (config.scaleShowLabelBackdrop){
@@ -480,7 +480,7 @@
 								);
 								ctx.fill();
 							}
-							ctx.textBaseline = "middle";
+							ctx.textBaseline = 'middle';
 							ctx.fillStyle = config.scaleFontColor;
 							ctx.fillText(label, width / 2, height / 2 - (scaleHop * (i + 1)));
 						}
@@ -522,9 +522,12 @@
 				}
 
 				function getValueBounds(){
-					var upperValue = Number.MIN_VALUE;
-					var lowerValue = Number.MAX_VALUE;
-					for (var i = 0; i < data.length; i++){
+					var upperValue = Number.MIN_VALUE,
+						lowerValue = Number.MAX_VALUE,
+						i = 0,
+						len = data.length;
+
+					for (; i < len; i++){
 						if (data[i].value > upperValue){
 							upperValue = data[i].value;
 						}
@@ -533,14 +536,11 @@
 						}
 					}
 
-					var maxSteps = Math.floor((scaleHeight / (labelHeight * 0.66)));
-					var minSteps = Math.floor((scaleHeight / labelHeight * 0.5));
-
 					return {
 						maxValue: upperValue,
 						minValue: lowerValue,
-						maxSteps: maxSteps,
-						minSteps: minSteps
+						maxSteps: Math.floor((scaleHeight / (labelHeight * 0.66))),
+						minSteps: Math.floor((scaleHeight / labelHeight * 0.5))
 					};
 				}
 			};
@@ -883,7 +883,7 @@
 
 				valueBounds = getValueBounds();
 				//Check and set the scale
-				labelTemplateString = (config.scaleShowLabels) ? config.scaleLabel : "";
+				labelTemplateString = (config.scaleShowLabels) ? config.scaleLabel : '';
 				if (!config.scaleOverride){
 
 					calculatedScale = calculateScale(scaleHeight, valueBounds.maxSteps, valueBounds.minSteps, valueBounds.maxValue, valueBounds.minValue, labelTemplateString);
@@ -978,10 +978,10 @@
 
 					if (rotateLabels > 0){
 						ctx.save();
-						ctx.textAlign = "right";
+						ctx.textAlign = 'right';
 					}
 					else {
-						ctx.textAlign = "center";
+						ctx.textAlign = 'center';
 					}
 					ctx.fillStyle = config.scaleFontColor;
 					for (var i = 0; i < data.labels.length; i++){
@@ -1020,8 +1020,8 @@
 					ctx.lineTo(yAxisPosX, 5);
 					ctx.stroke();
 
-					ctx.textAlign = "right";
-					ctx.textBaseline = "middle";
+					ctx.textAlign = 'right';
+					ctx.textBaseline = 'middle';
 					for (var j = 0; j < calculatedScale.steps; j++){
 						ctx.beginPath();
 						ctx.moveTo(yAxisPosX - 3, xAxisPosY - ((j + 1) * scaleHop));
@@ -1145,7 +1145,7 @@
 
 				valueBounds = getValueBounds();
 				//Check and set the scale
-				labelTemplateString = (config.scaleShowLabels) ? config.scaleLabel : "";
+				labelTemplateString = (config.scaleShowLabels) ? config.scaleLabel : '';
 				if (!config.scaleOverride){
 
 					calculatedScale = calculateScale(scaleHeight, valueBounds.maxSteps, valueBounds.minSteps, valueBounds.maxValue, valueBounds.minValue, labelTemplateString);
@@ -1203,10 +1203,10 @@
 
 					if (rotateLabels > 0){
 						ctx.save();
-						ctx.textAlign = "right";
+						ctx.textAlign = 'right';
 					}
 					else {
-						ctx.textAlign = "center";
+						ctx.textAlign = 'center';
 					}
 					ctx.fillStyle = config.scaleFontColor;
 					for (var i = 0; i < data.labels.length; i++){
@@ -1240,8 +1240,8 @@
 					ctx.lineTo(yAxisPosX, 5);
 					ctx.stroke();
 
-					ctx.textAlign = "right";
-					ctx.textBaseline = "middle";
+					ctx.textAlign = 'right';
+					ctx.textBaseline = 'middle';
 					for (var j = 0; j < calculatedScale.steps; j++){
 						ctx.beginPath();
 						ctx.moveTo(yAxisPosX - 3, xAxisPosY - ((j + 1) * scaleHop));
@@ -1265,7 +1265,7 @@
 					var longestText = 1;
 					//if we are showing the labels
 					if (config.scaleShowLabels){
-						ctx.font = config.scaleFontStyle + " " + config.scaleFontSize + "px " + config.scaleFontFamily;
+						ctx.font = config.scaleFontStyle + ' ' + config.scaleFontSize + 'px ' + config.scaleFontFamily;
 						for (var i = 0; i < calculatedScale.labels.length; i++){
 							var measuredText = ctx.measureText(calculatedScale.labels[i]).width;
 							longestText = (measuredText > longestText) ? measuredText : longestText;
@@ -1366,7 +1366,7 @@
 					easingFunction = animationOptions[config.animationEasing],
 					percentAnimComplete = (config.animation) ? 0 : 1;
 
-				if (typeof drawScale !== "function")
+				if (typeof drawScale !== 'function')
 					drawScale = function(){};
 
 				requestAnimFrame(animLoop);
@@ -1392,7 +1392,7 @@
 						requestAnimFrame(animLoop);
 					}
 					else {
-						if (typeof config.onAnimationComplete == "function") config.onAnimationComplete();
+						if (typeof config.onAnimationComplete == 'function') config.onAnimationComplete();
 					}
 
 				}

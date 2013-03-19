@@ -1,6 +1,6 @@
 chrt.js
 =======
-chrt.js is a fork of Chart.js, available under the [MIT license] (http://opensource.org/licenses/MIT).
+chrt.js is a fork of Chart.js, available under the [MIT license](http://opensource.org/licenses/MIT).
 
 ## Getting started
 

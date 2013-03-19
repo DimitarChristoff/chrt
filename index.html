@@ -5,7 +5,7 @@
 	<link href="styles.css" rel="stylesheet">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="js/prettify.js"></script>
-	<script src="../js/chrt.js"></script>
+	<script src="../js/vendor/require.js"></script>
 	<script type="text/javascript" src="//use.typekit.net/puc1imu.js"></script>
 	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 </head>
@@ -679,9 +679,8 @@
 </article>
 </div>
 </div>
-</body>
 <script>
-	$(document).ready(function(){
+	require(['../js/chrt'], function(Chart){
 
 		var $nav = $("nav dl");
 

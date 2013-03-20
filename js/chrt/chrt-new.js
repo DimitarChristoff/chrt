@@ -4,9 +4,10 @@ define([
 	'../vendor/emitter',
 	'../vendor/lodash',
 	'../vendor/prime-utils',
+	// '../vendor/kinetic',
 	// charting chrt and components
 	'./easing'
-], function(prime, emitter, _, utils, easing){
+], function(prime, emitter, _, utils, /* Kinetic,*/ easing){
 
 	// shared / reusable bits.
 
@@ -29,7 +30,7 @@ define([
 			this.ctx = this.options.element.getContext('2d');
 			this.data = this.options.data;
 
-			this.width = this.ctx.canvas.width,
+			this.width = this.ctx.canvas.width;
 			this.height = this.ctx.canvas.height;
 
 			this.retinaDisplay();

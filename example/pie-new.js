@@ -1,14 +1,8 @@
 require.config({
-	baseUrl: '../',
-	paths: {
-		charts: 'js/chrt',
-		vendor: 'js/vendor/',
-		prime: 'vendor/prime',
-		lodash: 'vendor/lodash'
-	}
+	baseUrl: '../js/'
 });
 
-require(['charts/pie','lodash'], function(PieChart, _){
+require(['chrt/pie', 'vendor/lodash'], function(PieChart, _){
 	'use strict';
 
 	var chrt = new PieChart({
@@ -43,6 +37,10 @@ require(['charts/pie','lodash'], function(PieChart, _){
 
 	chrt.on('render', function(){
 		console.log('rendered');
+
+		this.setOptions({
+			animation: false
+		});
 
 		this.data.reverse();
 		setTimeout(_.bind(this.render, this), 3000);

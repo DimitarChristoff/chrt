@@ -1352,7 +1352,7 @@
 						minSteps: minSteps
 					};
 				}
-			};
+			}; // Bar
 
 			function calculateOffset(val, calculatedScale, scaleHop){
 				var outerValue = calculatedScale.steps * calculatedScale.stepValue;

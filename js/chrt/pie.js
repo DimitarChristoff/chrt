@@ -2,8 +2,9 @@
 /*global define, require*/
 define([
 	'./chrt-new',
-	'../vendor/prime'
-], function(chrt, prime){
+	'../vendor/prime',
+	'../vendor/lodash'
+], function(chrt, prime, _){
 	'use strict';
 
 	return prime({

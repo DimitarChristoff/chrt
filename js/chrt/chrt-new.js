@@ -155,5 +155,15 @@ define([
 	chrt.implement(new emitter);
 	chrt.implement(new utils.options);
 
+	chrt.define('data', {
+		set: function(value){
+			this._data = value;
+			this.emit('data');
+		},
+		get: function(){
+			return this._data;
+		}
+	});
+
 	return chrt;
 });

@@ -6,40 +6,122 @@ chrt.js
 
 ### Including chrt.js
 
-`chrt.js` is an AMD fork of `Chart.js`. You use it by doing:
+`chrt.js` is an extensible event-driven fork of `Chart.js`, powered by [mootools prime](https://github.com/mootools/prime).
+It is vastly different from the original, using proper Class structures and Kinetic.js for Canvas events.
 
 ```javascript
-require(['chrt', function(Chart){
-    new Chart(...);
+require(['chrt/pie','vendor/lodash'], function(PieChart, _){
+    var chrt = new PieChart({
+        element: document.getElementById('canvas'),
+        data: [{
+            value: 30,
+            color: '#F38630',
+            labelFontSize: 16,
+            label: 'Liberal Democrats',
+            labelColor: '#ffffff'
+        }, {
+            value: 50,
+            color: "#880000",
+            label: 'Labour',
+            labelColor: '#ffffff'
+        }, {
+            value: 100,
+            color: "#69D2E7",
+            label: 'Conservatives',
+            labelFontColor: '#ffffff'
+        }],
+        labelFontSize: 16,
+        animation: true,
+        animateRotate: false,
+        animateScale: true
+    });
+
+
+    chrt.on('ready', function(){
+        console.log('ctx ready');
+    });
+
+    chrt.on('beforerender', function(){
+        console.log('about to render, new data in');
+
+        _.each(this.data, function(el){
+            el.value = el.value + _.random(-10, 10);
+        });
+    });
+
+    chrt.on('render', function(){
+        console.log('rendered');
+
+        this.setOptions({
+            animateScale: false
+        });
+
+
+        setTimeout(_.bind(this.render, this), 3000);
+    });
+
+    chrt.render();
 });
 ```
 
-If requirejs is not available, it will export `Chart` to your global object but will expect to
-find `lodash` or `underscore.js` first (so `window._`);
+## Creating a new chart
 
-## Creating a chart
-
-To create a chart, we need to instantiate the Chart class. To do this, we need to pass in the 2d context of where we want to draw the chart. Here's an example.
-
-```html
-<canvas id="myChart" width="400" height="400"></canvas>
-```
-And the js:
+To create a chart, we need to create a new prime, extending the `chrt` base Class.
 
 ```javascript
-// Get the context of the canvas element we want to select
-var ctx = document.getElementbyId("myChart").getContext("2d");
-var myNewChart = new Chart(ctx).PolarArea(data);
+define([
+	'./chrt',
+	'../vendor/prime',
+	'../vendor/lodash'
+], function(chrt, prime, _){
+	'use strict';
+
+	return prime({
+
+		options: {
+		    // defaults
+			segmentShowStroke: true,
+			segmentStrokeColor: '#fff',
+			segmentStrokeWidth: 2,
+			animation: true,
+			animationSteps: 60,
+			animationEasing: 'easeOutSine',
+			animateRotate: true,
+			animateScale: false
+		},
+
+		inherits: chrt,
+
+        render: function(){
+            this.ctx;
+        }
+    });
+});
 ```
-After we've instantiated the Chart class on the canvas we want to draw on, Chart.js will handle the scaling for retina displays.
 
-With the Chart class set up, we can go on to create one of the charts Chart.js has available. In the example below, we would be drawing a Polar area chart.
+You can also extend existing chrt types:
 
-```javascript
-new Chart(ctx).PolarArea(data,options);
 ```
+define([
+	'./chrt/pie',
+	'../vendor/prime',
+	'../vendor/lodash'
+], function(pie, prime, _){
+    'use strict';
 
-We call a method of the name of the chart we want to create. We pass in the data for that chart type, and the options for that chart as parameters. Chart.js will merge the options you pass in with the default options for that chart type.
+    return prime({
+
+        inherits: pie,
+
+        consructor: function(options){
+            // overrides...
+            this.parent();
+        }
+
+    });
+
+});
+```
 
 ## Chart types
 
@@ -83,7 +165,7 @@ The data for line charts is broken up into an array of datasets. Each dataset ha
 #### Chart options
 
 ```javascript
-Line.defaults = {
+line.prototype.options = {
 
     //Boolean - If we show the scale above the chart data
     scaleOverlay: false,
@@ -160,9 +242,6 @@ Line.defaults = {
     animationSteps: 60,
 
     //String - Animation easing effect
-    animationEasing: "easeOutQuart",
-
-    //Function - Fires when the animation is complete
-    onAnimationComplete: null
+    animationEasing: "easeOutQuart"
 };
 ```

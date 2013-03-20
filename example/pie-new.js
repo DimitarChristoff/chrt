@@ -35,7 +35,9 @@ require(['charts/pie'], function(PieChart){
 		console.log('about to render');
 		this.data.push({
 			value: 44,
-			color: '#550000'
+			color: '#550000',
+			label: 'Evented',
+			labelColor : '#FFFFAF'
 		});
 	});
 

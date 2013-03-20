@@ -3,7 +3,7 @@
 define([
 	'./chrt-new',
 	'../vendor/prime'
-],function(chrt, prime){
+], function(chrt, prime){
 	'use strict';
 
 	return prime({
@@ -17,7 +17,11 @@ define([
 			animationEasing: 'easeOutBounce',
 			animateRotate: true,
 			animateScale: false,
-			onAnimationComplete: null
+			labelFontFamily: '\'Arial\'',
+			labelFontStyle: 'normal',
+			labelFontSize: 12,
+			labelFontColor: '#666',
+			labelFontAlign: 'middle'
 		},
 
 		inherits: chrt,
@@ -46,8 +50,9 @@ define([
 				ctx = this.ctx,
 				width = this.width,
 				height = this.height,
-				//In case we have a canvas that is not a square. Minus 5 pixels as padding round the edge.
-				pieRadius = this.Min([height / 2, width / 2]) - 5;
+			//In case we have a canvas that is not a square. Minus 5 pixels as padding round the edge.
+				pieRadius = this.Min([height / 2, width / 2]) - 5,
+				labels = [];
 
 			if (this.options.animation){
 				if (this.options.animateScale){
@@ -60,7 +65,19 @@ define([
 
 			for (; i < len; i++){
 				segmentTotal += data[i].value;
+
+				if (data[i].label){
+					labels.push({
+						'label': data[i].label,
+						start: segmentTotal - data[i].value,
+						end: segmentTotal
+					});
+				}
 			}
+
+			this.setFont(this.options.labelFontStyle, this.options.labelFontSize, this.options.labelFontFamily);
+			ctx.textBaseline = this.options.labelFontAlign;
+
 
 			for (i = 0; i < len; i++){
 				segmentAngle = rotateAnimation * ((data[i].value / segmentTotal) * (Math.PI * 2));
@@ -70,6 +87,25 @@ define([
 				ctx.closePath();
 				ctx.fillStyle = data[i].color;
 				ctx.fill();
+
+				if (data[i].label && scaleAnimation * pieRadius * 2 * segmentAngle / (2 * Math.PI) > this.options.labelFontSize){
+					ctx.fillStyle = data[i].labelColor || this.options.labelFontColor;
+					var textRotation = -(cumulativeAngle + segmentAngle) + segmentAngle / 2,
+						tX = width / 2 + scaleAnimation * pieRadius * Math.cos(textRotation) - 10,
+						tY = height / 2 - scaleAnimation * pieRadius * Math.sin(textRotation);
+
+					ctx.textAlign = 'right';
+					if (textRotation < -Math.PI / 2){
+						textRotation -= Math.PI;
+						ctx.textAlign = 'left';
+						tX += 20;
+					}
+					ctx.translate(tX, tY);
+					ctx.rotate(-textRotation);
+					ctx.fillText(data[i].label, 0, 0);
+					ctx.rotate(textRotation);
+					ctx.translate(-tX, -tY);
+				}
 
 				if (this.options.segmentShowStroke){
 					ctx.lineWidth = this.options.segmentStrokeWidth;

@@ -144,7 +144,8 @@ define([
 		},
 
 		setFont: function(style, size, family){
-			return [style, size + px, family].join(' ');
+			this.ctx.font = [style, size + px, family].join(' ');
+			return this;
 		}
 
 	});

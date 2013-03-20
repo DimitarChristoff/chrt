@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>chrt.js - a fork of Chart.js</title>
+    <title>chrt.js - a dodgy fork of Chart.js</title>
     <link href="css/doctor.css" type="text/css" rel="stylesheet">
 
     
@@ -11,7 +11,7 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a title="chrt.js - a fork of Chart.js" class="brand" href="#" style="background-image:url()"></a>
+            <a title="chrt.js - a dodgy fork of Chart.js" class="brand" href="#" style="background-image:url()"></a>
             
         </div>
     </div>
@@ -26,7 +26,7 @@
 
     </div>
     
-    <ul id="sections"><li class="l2"><a href="#getting-started">Getting started</a><ul><li class="l3"><a href="#including-chrtjs">Including chrt.js</a></li></ul></li><li class="l2"><a href="#creating-a-chart">Creating a chart</a></li><li class="l2"><a href="#chart-types">Chart types</a><ul><li class="l3"><a href="#line-chart">Line chart</a></li></ul></li></ul>
+    <ul id="sections"><li class="l2"><a href="#getting-started">Getting started</a><ul><li class="l3"><a href="#including-chrtjs">Including chrt.js</a></li></ul></li><li class="l2"><a href="#creating-a-new-chart">Creating a new chart</a></li><li class="l2"><a href="#chart-types">Chart types</a><ul><li class="l3"><a href="#line-chart">Line chart</a></li></ul></li></ul>
     
     <div class="extra" id="github">
         <a href="https://github.com/DimitarChristoff/chrt">Source on Github</a>
@@ -44,23 +44,110 @@
 <p><em>Simple HTML5 Charts using the canvas element</em> <a href="http://www.chartjs.org">chartjs.org</a></p>
 <h2 id="getting-started">Getting started</h2>
 <h3 id="including-chrtjs">Including chrt.js</h3>
-<p><code>chrt.js</code> is an AMD fork of <code>Chart.js</code>. You use it by doing:</p>
-<pre class="prettyprint linenums"><code class="lang-javascript">require([&#39;chrt&#39;, function(Chart){
-    new Chart(...);
+<p><code>chrt.js</code> is an extensible event-driven fork of <code>Chart.js</code>, powered by <a href="https://github.com/mootools/prime">mootools prime</a>.
+It is vastly different from the original, using proper Class structures and Kinetic.js for Canvas events.</p>
+<pre class="prettyprint linenums"><code class="lang-javascript">require([&#39;chrt/pie&#39;,&#39;vendor/lodash&#39;], function(PieChart, _){
+    var chrt = new PieChart({
+        element: document.getElementById(&#39;canvas&#39;),
+        data: [{
+            value: 30,
+            color: &#39;#F38630&#39;,
+            labelFontSize: 16,
+            label: &#39;Liberal Democrats&#39;,
+            labelColor: &#39;#ffffff&#39;
+        }, {
+            value: 50,
+            color: &quot;#880000&quot;,
+            label: &#39;Labour&#39;,
+            labelColor: &#39;#ffffff&#39;
+        }, {
+            value: 100,
+            color: &quot;#69D2E7&quot;,
+            label: &#39;Conservatives&#39;,
+            labelFontColor: &#39;#ffffff&#39;
+        }],
+        labelFontSize: 16,
+        animation: true,
+        animateRotate: false,
+        animateScale: true
+    });
+
+
+    chrt.on(&#39;ready&#39;, function(){
+        console.log(&#39;ctx ready&#39;);
+    });
+
+    chrt.on(&#39;beforerender&#39;, function(){
+        console.log(&#39;about to render, new data in&#39;);
+
+        _.each(this.data, function(el){
+            el.value = el.value + _.random(-10, 10);
+        });
+    });
+
+    chrt.on(&#39;render&#39;, function(){
+        console.log(&#39;rendered&#39;);
+
+        this.setOptions({
+            animateScale: false
+        });
+
+
+        setTimeout(_.bind(this.render, this), 3000);
+    });
+
+    chrt.render();
 });</code></pre>
-<p>If requirejs is not available, it will export <code>Chart</code> to your global object but will expect to
-find <code>lodash</code> or <code>underscore.js</code> first (so <code>window._</code>);</p>
-<h2 id="creating-a-chart">Creating a chart</h2>
-<p>To create a chart, we need to instantiate the Chart class. To do this, we need to pass in the 2d context of where we want to draw the chart. Here&#39;s an example.</p>
-<pre class="prettyprint linenums"><code class="lang-html">&lt;canvas id=&quot;myChart&quot; width=&quot;400&quot; height=&quot;400&quot;&gt;&lt;/canvas&gt;</code></pre>
-<p>And the js:</p>
-<pre class="prettyprint linenums"><code class="lang-javascript">// Get the context of the canvas element we want to select
-var ctx = document.getElementbyId(&quot;myChart&quot;).getContext(&quot;2d&quot;);
-var myNewChart = new Chart(ctx).PolarArea(data);</code></pre>
-<p>After we&#39;ve instantiated the Chart class on the canvas we want to draw on, Chart.js will handle the scaling for retina displays.</p>
-<p>With the Chart class set up, we can go on to create one of the charts Chart.js has available. In the example below, we would be drawing a Polar area chart.</p>
-<pre class="prettyprint linenums"><code class="lang-javascript">new Chart(ctx).PolarArea(data,options);</code></pre>
-<p>We call a method of the name of the chart we want to create. We pass in the data for that chart type, and the options for that chart as parameters. Chart.js will merge the options you pass in with the default options for that chart type.</p>
+<h2 id="creating-a-new-chart">Creating a new chart</h2>
+<p>To create a chart, we need to create a new prime, extending the <code>chrt</code> base Class.</p>
+<pre class="prettyprint linenums"><code class="lang-javascript">define([
+    &#39;./chrt&#39;,
+    &#39;../vendor/prime&#39;,
+    &#39;../vendor/lodash&#39;
+], function(chrt, prime, _){
+    &#39;use strict&#39;;
+
+    return prime({
+
+        options: {
+            // defaults
+            segmentShowStroke: true,
+            segmentStrokeColor: &#39;#fff&#39;,
+            segmentStrokeWidth: 2,
+            animation: true,
+            animationSteps: 60,
+            animationEasing: &#39;easeOutSine&#39;,
+            animateRotate: true,
+            animateScale: false
+        },
+
+        inherits: chrt,
+
+        render: function(){
+            this.ctx;
+        }
+    });
+});</code></pre>
+<p>You can also extend existing chrt types:</p>
+<pre class="prettyprint linenums"><code>define([
+    &#39;./chrt/pie&#39;,
+    &#39;../vendor/prime&#39;,
+    &#39;../vendor/lodash&#39;
+], function(pie, prime, _){
+    &#39;use strict&#39;;
+
+    return prime({
+
+        inherits: pie,
+
+        consructor: function(options){
+            // overrides...
+            this.parent();
+        }
+
+    });
+
+});</code></pre>
 <h2 id="chart-types">Chart types</h2>
 <h3 id="line-chart">Line chart</h3>
 <h4>Introduction</h4>
@@ -88,7 +175,7 @@ var myNewChart = new Chart(ctx).PolarArea(data);</code></pre>
 <p>The line chart requires an array of labels for each of the data points. This is show on the X axis.</p>
 <p>The data for line charts is broken up into an array of datasets. Each dataset has a colour for the fill, a colour for the line and colours for the points and strokes of the points. These colours are strings just like CSS. You can use RGBA, RGB, HEX or HSL notation.</p>
 <h4>Chart options</h4>
-<pre class="prettyprint linenums"><code class="lang-javascript">Line.defaults = {
+<pre class="prettyprint linenums"><code class="lang-javascript">line.prototype.options = {
 
     //Boolean - If we show the scale above the chart data
     scaleOverlay: false,
@@ -165,10 +252,7 @@ var myNewChart = new Chart(ctx).PolarArea(data);</code></pre>
     animationSteps: 60,
 
     //String - Animation easing effect
-    animationEasing: &quot;easeOutQuart&quot;,
-
-    //Function - Fires when the animation is complete
-    onAnimationComplete: null
+    animationEasing: &quot;easeOutQuart&quot;
 };</code></pre>
 
     

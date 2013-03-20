@@ -8,7 +8,7 @@ require.config({
 	}
 });
 
-require(['charts/pie'], function(PieChart){
+require(['charts/pie','lodash'], function(PieChart, _){
 	'use strict';
 
 	var chrt = new PieChart({
@@ -45,7 +45,7 @@ require(['charts/pie'], function(PieChart){
 		console.log('rendered');
 
 		this.data.reverse();
-		setTimeout(this.render.bind(this), 3000);
+		setTimeout(_.bind(this.render, this), 3000);
 	})
 
 	chrt.render();
